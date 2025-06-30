@@ -1,0 +1,63 @@
+{
+  "variables": {
+    "vm_name": "debian12",
+    "iso_url": "https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-12.11.0-amd64-netinst.iso",
+    "iso_checksum": "sha256:30ca12a15cae6a1033e03ad59eb7f66a6d5a258dcf27acd115c2bd42d22640e8"
+  },
+  "builders": [
+    {
+      "type": "virtualbox-iso",
+      "guest_os_type": "Debian_64",
+      "vm_name": "{{user `vm_name`}}",
+      "iso_url": "{{user `iso_url`}}",
+      "iso_checksum": "{{user `iso_checksum`}}",
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "ssh_timeout": "20m",
+      "shutdown_command": "echo 'vagrant' | sudo -S shutdown -P now",
+      "disk_size": 61440,
+      "http_directory": "http",
+      "boot_wait": "5s",
+      "boot_command": [
+        "<esc><wait>",
+        "auto url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg ",
+        "debian-installer=en_US auto locale=pt_BR ",
+        "kbd-chooser/method=us ",
+        "hostname={{user `vm_name`}} ",
+        "fb=false debconf/frontend=noninteractive ",
+        "keyboard-configuration/layout=Brazilian ",
+        "keyboard-configuration/variant=Brazilian<enter>"
+      ],
+      "vboxmanage": [
+        ["modifyvm", "{{.Name}}", "--memory", "2048"],
+        ["modifyvm", "{{.Name}}", "--cpus", "2"],
+
+        ["modifyvm", "{{.Name}}", "--nic1", "nat"],
+        ["modifyvm", "{{.Name}}", "--nictype1", "82540EM"],
+        ["modifyvm", "{{.Name}}", "--cableconnected1", "on"]
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "echo 'Provisionando como vagrant...'",
+        "echo 'auto enp0s8' | sudo tee -a /etc/network/interfaces",
+        "echo 'iface enp0s8 inet dhcp' | sudo tee -a /etc/network/interfaces",
+        "mkdir -p /home/vagrant/.ssh",
+        "chmod 700 /home/vagrant/.ssh",
+        "curl -fsSL https://raw.githubusercontent.com/hashicorp/vagrant/main/keys/vagrant.pub -o /home/vagrant/.ssh/authorized_keys",
+        "cat /home/vagrant/.ssh/authorized_keys",
+        "chmod 600 /home/vagrant/.ssh/authorized_keys",
+        "chown -R vagrant:vagrant /home/vagrant/.ssh"
+      ]
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "output": "debian12.box"
+    }
+  ]
+}

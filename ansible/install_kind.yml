@@ -1,0 +1,12 @@
+---
+- name: Instalar o kind
+  hosts: webservers
+  become: yes
+  tasks:
+    - name: Baixar o Kind
+      ansible.builtin.get_url:
+        url: https://kind.sigs.k8s.io/dl/v0.28.0/kind-linux-amd64
+        dest: /usr/local/bin/kind
+    
+    - name: Dando permissão para o kind
+      file: dest=/usr/local/bin/kind mode=a+x

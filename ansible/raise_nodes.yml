@@ -1,0 +1,28 @@
+---
+- name: Criação do Cluster
+  hosts: webservers
+  become: yes
+  tasks:
+    - name: Criar diretório de configuração do Kind
+      file:
+        path: ./kind
+        state: directory
+        owner: vagrant
+        group: vagrant
+        mode: '0755'
+    - name: Criar arquivo de configuração do cluster
+      copy:
+        dest: ./kind/config.yaml
+        content: |
+          kind: Cluster
+          apiVersion: kind.x-k8s.io/v1alpha4
+          nodes:
+            - role: control-plane
+            - role: worker
+            - role: worker
+    - name: Criar o cluster com Kind
+      become_user: vagrant
+      command: >
+        kind create cluster
+        --config ./kind/config.yaml
+        --name dev-cluster

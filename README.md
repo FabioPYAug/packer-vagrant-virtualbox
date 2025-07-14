@@ -126,13 +126,13 @@ O Vagrant foi escolhido pois é uma ferramenta prática para o gerenciamento das
 Provisiona as instalações para a VM, preparando o ambiente para o que for necessário no projeto.
 
 ### Kubectl e Kind
-São usados para gerenciar os recursos kubernetes, interagindo com os Clusters, podendo até criar alguns para testes rápidos.
+São usados para gerenciar os recursos kubernetes, interagindo com os Clusters, podendo até criar alguns para testes rápidos. Ele foi muito útil e por isso foi escolhido para o projeto
 
 ### Nginx
-Proviciona o IP para serviços web (usado para o Frontend)
+Proviciona o IP para serviços web (usado para o Frontend).
 
 ### ArgoCD
-Gerenciar os deployments no Cluster com base no repositório no Github.
+Foi usado para gerenciar os deployments no Cluster com base no repositório no Github.
 
 ### Docker
 Criar containers para a aplicação. Além de ser necessário para rodar serviços de forma isolada.

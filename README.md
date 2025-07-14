@@ -22,8 +22,6 @@ Clone o repositório utilizando o comando abaixo:
 git clone https://github.com/FabioPYAug/packer-vagrant-virtualbox.git
 ~~~~
 
-Escolha uma pasta adequada para o projeto.
-
 ### Arquivos binários
 
 Para executar os comandos do vagrant e packer será necessário baixar dois arquivos binários. Você deverá entrar nesses dois links abaixo.
@@ -89,11 +87,26 @@ ansible-playbook -i hosts start_argocd.yml
 ~~~
 
 ### ArgoCD
+Agora, ao utilizar o comando start_argocd.yml, o ArgoCD começará a ser rodado e você deverá utilizar "https://<ip da máquina>:8080/" em uma página web. Lá, você irá criar uma nova aplicação (no total são três) e nelas irá preencher os valores com o link do github do projeto (front, back e banco). Após isso irá fazer o sync e caso tudo esteja verde deu tudo certo!
+<img width="1170" height="660" alt="image" src="https://github.com/user-attachments/assets/fa1cdb5f-4099-4ce9-8f6a-3481eca98abf" />
+<img width="1223" height="743" alt="image" src="https://github.com/user-attachments/assets/30cd4cd0-a062-44bc-a410-7a27373c2d7f" />
 
-(preencher dps na faculdade com os passos a passos)
+### Hospedar IP
+Nessa parte você irá abrir o terminal com o ssh utilizando o comando:
+~~~
+ssh vagrant@<seu ip>
+~~~
+Agora, você irá rodar o comando para ver os seus serviços:
+~~~
+kubectl get svc
+~~~
+Esse comando irá retornar as portas e nomes de cada serviço e com eles, você irá dividir o terminal para mais três e rodar esse comando três vezes para hospedar o IP:
+~~~
+kubectl port-forward svc/<nome do serviço> --address 0.0.0.0 <porta>:<porta>
+~~~
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ## Documentação
-
+[Documentação](https://docs.google.com/document/d/1yj_hls5wxS2QRv2Vp7o4Nbvax-kYS5KR8sc2TPcUDpw/edit?usp=sharing)
 ### Usados?
 - Packer;
 - Vagrant;
